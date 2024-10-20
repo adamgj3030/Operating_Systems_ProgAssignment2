@@ -1,4 +1,3 @@
-// libraries needed from client.cpp
 #include <unistd.h>
 #include <iostream>
 #include <string>
@@ -6,7 +5,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
-#include <cstring>
+// added this library manually
+#include <cstring> 
 
 struct symbol
 {
