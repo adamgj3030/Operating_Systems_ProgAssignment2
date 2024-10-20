@@ -1,16 +1,21 @@
+// libraries needed from server.cpp
+#include <unistd.h>
 #include <iostream>
+#include <stdlib.h>
+#include <string>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <unistd.h>
 #include <cstring>
-#include <string>
+// libraries needed from fireman.cpp
+#include <sys/wait.h>
+// libraries needed from shannon code project
 #include <vector>
 #include <map>
-#include <cmath>
 #include <algorithm>
-#include <signal.h>
-#include <sys/wait.h>
+#include <cmath>
+
+//#include <signal.h>
 
 struct CharCode {
     char character;
