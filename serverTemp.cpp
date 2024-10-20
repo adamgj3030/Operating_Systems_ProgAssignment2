@@ -159,6 +159,41 @@ int main(int argc, char* argv[]) {
             msg.line = message.line;
             shannonCode(msg);
 
+            int alphabetSize = msg.charCodeVec.size();
+            n = write(newsockfd, &alphabetSize, sizeof(int));
+            if (n < 0) {
+                std::cerr << "Error writing alphabet size to socket" << std::endl;
+                exit(1);
+            }
+            
+            for (auto& charCode : msg.charCodeVec) {
+
+                n = write(newsockfd, &charCode.character, sizeof(char));
+                if (n < 0) {
+                    std::cerr << "Error writing character to socket" << std::endl;
+                    exit(1);
+                }
+
+                n = write(newsockfd, &charCode.freq, sizeof(int));
+                if (n < 0) {
+                    std::cerr << "Error writing frequency to socket" << std::endl;
+                    exit(1);
+                }
+
+                int codeLength = charCode.code.size();
+                n = write(newsockfd, &codeLength, sizeof(int));
+                if (n < 0) {
+                    std::cerr << "Error writing code length to socket" << std::endl;
+                    exit(1);
+                }
+
+                n = write(newsockfd, charCode.code.c_str(), codeLength);
+                if (n < 0) {
+                    std::cerr << "Error writing Shannon code to socket" << std::endl;
+                    exit(1);
+                }
+            }
+
             int encodedSize = msg.encodedLine.size();
             char encodedLine[encodedSize + 1]; // +1 for null terminator
             strcpy(encodedLine, msg.encodedLine.c_str());
