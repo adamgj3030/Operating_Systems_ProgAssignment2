@@ -110,15 +110,14 @@ int main(int argc, char* argv[]) {
     int sockfd, newsockfd, portno, clilen;
     struct sockaddr_in serv_addr, cli_addr;
     int n;
-    signal(SIGCHLD, fireman);
     if (argc < 2) {
         std::cerr << "ERROR, no port provided" << std::endl;
-        exit(1);
+        exit(0);
     }
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
         std::cerr << "Error opening socket" << std::endl;
-        exit(1);
+        exit(0);
     }
 
     bzero((char*)&serv_addr, sizeof(serv_addr));
@@ -131,12 +130,13 @@ int main(int argc, char* argv[]) {
         sizeof(serv_addr)) < 0)
     {
         std::cerr << "Error on binding" << std::endl;
-        exit(1);
+        exit(0);
     }
 
     listen(sockfd, 5);
     clilen = sizeof(cli_addr);
 
+    signal(SIGCHLD, fireman);
     while (true) 
     {
         newsockfd = accept(sockfd, (struct sockaddr*)&cli_addr, (socklen_t*)&clilen);
@@ -195,7 +195,7 @@ int main(int argc, char* argv[]) {
             }
 
             int encodedSize = msg.encodedLine.size();
-            char encodedLine[encodedSize + 1]; // +1 for null terminator
+            char encodedLine[encodedSize + 1];
             strcpy(encodedLine, msg.encodedLine.c_str());
 
             n = write(newsockfd, &encodedSize, sizeof(int));
@@ -215,7 +215,6 @@ int main(int argc, char* argv[]) {
             close(newsockfd);
             _exit(0);
         }
-        close(newsockfd);
     }
 
     close(sockfd);
